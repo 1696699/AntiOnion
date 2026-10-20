@@ -1,0 +1,8 @@
+{
+  "name": "AntiOnion Tor Research",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "postCreateCommand": "bash .devcontainer/install-tor-expert-bundle.sh && bash .devcontainer/install-tor-browser.sh",
+  "remoteUser": "vscode"
+}
