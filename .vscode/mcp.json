@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "tor-browser-desktop": {
+      "type": "stdio",
+      "command": "/opt/tor-desktop-mcp/bin/python",
+      "args": ["${workspaceFolder}/.devcontainer/tor-desktop-mcp.py"],
+      "env": {
+        "DISPLAY": ":1",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

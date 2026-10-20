@@ -3,6 +3,14 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "Tor Browser Remote Desktop",
+      "onAutoForward": "notify",
+      "visibility": "private"
+    }
+  },
   "postCreateCommand": "bash .devcontainer/install-tor-expert-bundle.sh && bash .devcontainer/install-tor-browser.sh",
   "remoteUser": "vscode"
 }

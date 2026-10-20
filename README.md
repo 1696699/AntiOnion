@@ -1,6 +1,6 @@
 # AntiOnion
 
-This repository configures a Codespace for Tor-routed shell requests and installs Tor Browser for manual use when a graphical display is available.
+This repository configures a Codespace for Tor-routed shell requests and installs Tor Browser with an optional, password-protected remote desktop.
 
 ## Codespace Setup
 
@@ -36,8 +36,34 @@ cd "$HOME/.local/share/anti-onion/tor-browser-15.0.25"
 ./Browser/start-tor-browser.desktop --detach
 ```
 
-Installing GTK and X11 libraries does not create a graphical display. A standard Codespace is headless, so using the browser window requires a separately configured remote desktop. The Tor research agent has shell access but no browser UI or browser-control tool; it can route specific shell requests through Tor, but cannot inspect or operate Tor Browser pages.
+Installing GTK and X11 libraries does not create a graphical display. A standard Codespace is headless; use the optional remote desktop described below to open the browser. After approving the workspace MCP server and reloading VS Code, the Tor research agent can view screenshots and interact with that desktop.
 
 ## Updating Versions
 
 The pinned release version and signing-key fingerprints are in both `.devcontainer/install-tor-expert-bundle.sh` and `.devcontainer/install-tor-browser.sh`. Update these deliberately when adopting a new release, and verify its official Tor signature details before changing the pins.
+
+## Remote Desktop
+
+The Dev Container includes XFCE, TigerVNC, and noVNC. The desktop is opt-in and is not started automatically. Set a VNC password in the Codespace terminal; VNC passwords are limited to 8 characters, so use a unique password:
+
+```bash
+mkdir -p "$HOME/.vnc"
+vncpasswd "$HOME/.vnc/passwd"
+chmod 600 "$HOME/.vnc/passwd"
+```
+
+Do not put this password in the repository or share it in chat. Start the desktop with:
+
+```bash
+bash .devcontainer/remote-desktop.sh start
+```
+
+Open the private forwarded **Tor Browser Remote Desktop** port 6080 in the VS Code **Ports** panel, visit `/vnc.html`, and enter your VNC password. Both the VNC server and noVNC proxy listen on loopback; Codespaces forwards the web port with private visibility.
+
+Tor Browser is available from the XFCE applications menu. Stop the desktop when finished:
+
+```bash
+bash .devcontainer/remote-desktop.sh stop
+```
+
+This makes the browser visible to you. After approving the `tor-browser-desktop` MCP server in VS Code and reloading the workspace, the Tor research agent can request screenshots and interact with the desktop using bounded mouse, text, key, and scroll tools. The agent cannot access the VNC password; enter it only in noVNC. Do not use the desktop tools to enter credentials, recovery codes, or payment details. Confirm consequential actions such as form submissions or account changes before the agent performs them.
